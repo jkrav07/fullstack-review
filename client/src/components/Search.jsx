@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Search = ({ onSearch }) => {
+const Search = ({ onSearch, repos, setRepos }) => {
 
   const[term, setTerm] = useState('')
 
@@ -9,7 +9,19 @@ const Search = ({ onSearch }) => {
   }
 
   const search = () => {
-    onSearch(term);
+    onSearch(term); //console.log
+    //
+    $.post('http://127.0.0.1:1128/repos', {username: term})
+    .then(function(response) {
+      $.ajax({
+        url: 'http://127.0.0.1:1128/repos',
+        headers: { 'custom-header': 'Access-Control-Allow-Origin',
+        'Access-Control-Allow-Headers': '*'},
+        success: (data) => {
+          setRepos(data);
+        }
+      });
+    })
   }
 
   return (
